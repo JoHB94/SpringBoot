@@ -1,0 +1,15 @@
+[2024-01-31 17:14:44.568] [INFO ] [main] com.springboot.api.ApiApplication Starting ApiApplication using Java 17.0.5 with PID 27976 (C:\SpringBoot\api\target\classes started by whgus in C:\SpringBoot\api)
+[2024-01-31 17:14:44.571] [INFO ] [main] com.springboot.api.ApiApplication No active profile set, falling back to 1 default profile: "default"
+[2024-01-31 17:14:45.487] [INFO ] [main] org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port 8080 (http)
+[2024-01-31 17:14:45.499] [INFO ] [main] org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["http-nio-8080"]
+[2024-01-31 17:14:45.501] [INFO ] [main] org.apache.catalina.core.StandardService Starting service [Tomcat]
+[2024-01-31 17:14:45.501] [INFO ] [main] org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/10.1.17]
+[2024-01-31 17:14:45.582] [INFO ] [main] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+[2024-01-31 17:14:45.583] [INFO ] [main] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 973 ms
+[2024-01-31 17:14:46.026] [INFO ] [main] org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["http-nio-8080"]
+[2024-01-31 17:14:46.048] [INFO ] [main] org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port 8080 (http) with context path ''
+[2024-01-31 17:14:46.057] [INFO ] [main] com.springboot.api.ApiApplication Started ApiApplication in 1.916 seconds (process running for 2.229)
+[2024-01-31 17:15:00.073] [INFO ] [http-nio-8080-exec-1] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2024-01-31 17:15:00.073] [INFO ] [http-nio-8080-exec-1] org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+[2024-01-31 17:15:00.076] [INFO ] [http-nio-8080-exec-1] org.springframework.web.servlet.DispatcherServlet Completed initialization in 3 ms
+[2024-01-31 17:15:00.119] [INFO ] [http-nio-8080-exec-1] com.springboot.api.controller.GetController getHello 메서드가 호츌되었습니다.

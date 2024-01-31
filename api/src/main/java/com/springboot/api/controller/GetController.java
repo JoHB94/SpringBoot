@@ -3,16 +3,25 @@ package com.springboot.api.controller;
 import com.springboot.api.dto.MemberDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
+
 
 @RestController
 @RequestMapping("/api/v1/get-api")
 /*ResqustMapping 어노테이션은 별다른 설정을 하지 않으면 HTTP의 모든 요청을 받는다. */
 public class GetController {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(GetController.class);
     @RequestMapping(value = "/hello",method = RequestMethod.GET)
     public String getHello(){
+        LOGGER.info("getHello 메서드가 호츌되었습니다.");
         return "Hello World";
     }
     /*Spring 4.3버전 이후로는 @RequestMapping어노테이션을 더이상 사용하지 않는다.
@@ -26,6 +35,7 @@ public class GetController {
     /*매개변수를 받지 않는 GET메서드 구현*/
     @GetMapping(value = "/name")
     public String getName(){
+        LOGGER.info("getName 메서드가 호츌되었습니다.");
         return "Flature";
     }
 
@@ -33,6 +43,7 @@ public class GetController {
     * PathVariable 어노테이션을 사용한 매개변수 이용하기*/
     @GetMapping(value = "/variable1/{variable}")
     public String getVariable1(@PathVariable String variable){
+        LOGGER.info("@PathVariable을 통해 들어온 값 : {}", variable);
         return variable;
     }
 
