@@ -7,9 +7,11 @@ import com.springboot.jpa.data.entity.Product;
 import com.springboot.jpa.data.repository.ProductRepository;
 import com.springboot.jpa.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductDAO productDAO;
