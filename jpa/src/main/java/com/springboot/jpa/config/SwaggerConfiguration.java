@@ -1,4 +1,4 @@
-package config;
+package com.springboot.jpa.config;
 
 
 import io.swagger.v3.oas.models.Components;
