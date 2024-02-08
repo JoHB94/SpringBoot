@@ -1,6 +1,7 @@
 package com.springboot.advanced_jpa.data.repository;
 
 import com.springboot.advanced_jpa.data.entity.Product;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -30,8 +31,8 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     /*쿼리 메서드의 조건자 키워즈
     * Is : 값의 일치를 조건으로 사용하는 조건자 키워드. 생략되는 경우가 많으며 Equals와 동일한 기능을 수행.
     * */
-    Product findNumberIs(Long number);
-    Product findNumberEquals(Long number);
+    Product findByNumberIs(Long number);
+    Product findByNumberEquals(Long number);
     //Product findByNumber(Long); 와도 동일한 기능을 수행
 
     /*
@@ -51,10 +52,10 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     /*
     * (Is)True, (Is)False : boolean 타입으로 지정된 컬럼값을 확인하는 키워드.
     * */
-    Product findByisActiveTrue();
-    Product findByisActiveIsTrue();
-    Product findByisActiveFalse();
-    Product findByisActiveIsFalse();
+//    Product findByisActiveTrue();
+//    Product findByisActiveIsTrue();
+//    Product findByisActiveFalse();
+//    Product findByisActiveIsFalse();
 
     /*
     * And,Or : 여러 조건을 묶을 때 사용.
@@ -83,7 +84,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     List<Product> findByNameContains(String name);
     List<Product> findByNameContaining(String name);
-    List<Product> findByNameISContaining(String name);
+    List<Product> findByNameIsContaining(String name);
 
     List<Product> findByNameStartsWith(String name);
     List<Product> findByNameStartingWith(String name);
@@ -93,6 +94,22 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     List<Product> findByNameEndingWith(String name);
     List<Product> findByNameIsEndingWith(String name);
 
-    
+    /*
+    * 정렬 처리하기
+    * Asc & Desc : 오름차순 정렬 & 내림차순 정렬
+    * */
+    List<Product> findByNameOrderByNumberAsc(String name);
+    List<Product> findByNameOrderByNumberDesc(String name);
+
+    /*
+    * 여러 정렬 기준 사용 (And를 붙이지 않음)
+    * */
+    List<Product> findByNameOrderByPriceAscStockDesc(String name);
+    //price를 기준으로 오름차순 정렬은 한 뒤 stock을 기준으로 내림차순 정렬
+
+    /*
+    * 매개변수를 이용한 쿼리 정렬
+    * */
+    List<Product> findByName(String name, Sort sort);
 
 }
