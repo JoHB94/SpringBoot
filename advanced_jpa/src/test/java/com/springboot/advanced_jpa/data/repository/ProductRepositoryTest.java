@@ -1,6 +1,11 @@
 package com.springboot.advanced_jpa.data.repository;
 
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.springboot.advanced_jpa.data.entity.Product;
+import com.springboot.advanced_jpa.data.entity.QProduct;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +22,9 @@ public class ProductRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Test
     void sortingAndPagingTest() {
@@ -58,6 +66,63 @@ public class ProductRepositoryTest {
         System.out.println("*******************************************************************");
         List<Object[]> findByCol = productRepository.findByNameParam2("펜");
     }
+
+   /*
+   * QueryDSL에 의해 생성된 Q도메인 클래스를 활용하는 코드
+   * */
+    @Test
+    void queryDslTest() {
+        //JPAQuery를 활용한 코드
+        JPAQuery<Product> query = new JPAQuery(entityManager);
+        QProduct qProduct = QProduct.product;
+
+        List<Product> productList = query
+                .from(qProduct)
+                .where(qProduct.name.eq("펜"))
+                .orderBy(qProduct.price.asc())
+                .fetch();
+        /*
+        * List<T> fetch() : 조회 결과를 리스트로 반환합니다.
+        * T fetchOne : 단 건의 조회결과를 반환합니다.
+        * Long fetchCount() : 조회 결과의 개수를 반환합니다.
+        * T fetchFirst() : 여러건의 조회 결과 중 1건을 반환합니다.
+        * QueryResult<T> fetchResults() : 조회 결과 리스트와 개수를 포함한 QueryResults를 반환합니다.
+        * */
+
+        for(Product product : productList) {
+            System.out.println("---------------------");
+            System.out.println();
+            System.out.println("Product Number : " + product.getNumber());
+            System.out.println("Product Name : " + product.getName());
+            System.out.println("Product Price : " + product.getPrice());
+            System.out.println("Product Stock : " + product.getStock());
+            System.out.println();
+            System.out.println("---------------------");
+        }
+
+    }
+    @Test
+    void queryDslTest2() {
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+        QProduct qProduct = QProduct.product;
+
+        List<Product> productList = jpaQueryFactory.selectFrom(qProduct)
+                .where(qProduct.name.eq("펜"))
+                .orderBy(qProduct.price.asc())
+                .fetch();
+
+        for (Product product : productList) {
+            System.out.println("---------------------");
+            System.out.println();
+            System.out.println("Product Number : " + product.getNumber());
+            System.out.println("Product Name : " + product.getName());
+            System.out.println("Product Price : " + product.getPrice());
+            System.out.println("Product Stock : " + product.getStock());
+            System.out.println();
+            System.out.println("---------------------");
+        }
+    }
+
 
 
 
