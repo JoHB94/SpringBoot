@@ -4,9 +4,13 @@ import com.springboot.advanced_jpa.data.entity.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 public class ProductRepositoryTest {
@@ -41,7 +45,20 @@ public class ProductRepositoryTest {
         Product savedProduct2 = productRepository.save(product2);
         Product savedProduct3 = productRepository.save(product3);
 
-        productRepository.findByName("펜", Sort.by(Sort.Order.asc("price")));
-        productRepository.findByName("펜", Sort.by(Sort.Order.asc("price"), Sort.Order.desc("stock")));
+//        productRepository.findByName("펜", Sort.by(Sort.Order.asc("price")));
+//        productRepository.findByName("펜", Sort.by(Sort.Order.asc("price"), Sort.Order.desc("stock")));
+//
+//        Page<Product> productPage = productRepository.findByName("펜", PageRequest.of(0,2));
+        /*
+        * .of()메서드의 매개변수
+        * of(int page, int size) : 페이지 번호, 페이지당 데이터 갯수 
+        * of(int page, int size, Sort) : 페이지 번호, 페이지당 데이터 갯수, 정렬
+        * of(int page, int size, Direction, String properties) : 페이지 번호, 페이지당 데이터 갯수, 정렬방향, 속성(칼럼)
+        * */
+        System.out.println("*******************************************************************");
+        List<Object[]> findByCol = productRepository.findByNameParam2("펜");
     }
+
+
+
 }
