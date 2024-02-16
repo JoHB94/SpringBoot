@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,12 +25,14 @@ public class ProductRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
-
     @PersistenceContext
     EntityManager entityManager;
+    @Autowired
+    JPAQueryFactory jpaQueryFactory;
 
     @Test
     void sortingAndPagingTest() {
+        // given
         Product product1 = new Product();
         product1.setName("펜");
         product1.setPrice(1000);
@@ -40,7 +43,7 @@ public class ProductRepositoryTest {
         Product product2 = new Product();
         product2.setName("펜");
         product2.setPrice(5000);
-        product2.setStock(100);
+        product2.setStock(300);
         product2.setCreatedAt(LocalDateTime.now());
         product2.setUpdatedAt(LocalDateTime.now());
 
@@ -55,18 +58,33 @@ public class ProductRepositoryTest {
         Product savedProduct2 = productRepository.save(product2);
         Product savedProduct3 = productRepository.save(product3);
 
-//        productRepository.findByName("펜", Sort.by(Sort.Order.asc("price")));
-//        productRepository.findByName("펜", Sort.by(Sort.Order.asc("price"), Sort.Order.desc("stock")));
-//
-//        Page<Product> productPage = productRepository.findByName("펜", PageRequest.of(0,2));
-        /*
-        * .of()메서드의 매개변수
-        * of(int page, int size) : 페이지 번호, 페이지당 데이터 갯수 
-        * of(int page, int size, Sort) : 페이지 번호, 페이지당 데이터 갯수, 정렬
-        * of(int page, int size, Direction, String properties) : 페이지 번호, 페이지당 데이터 갯수, 정렬방향, 속성(칼럼)
-        * */
-        System.out.println("*******************************************************************");
-        List<Object[]> findByCol = productRepository.findByNameParam2("펜");
+        System.out.println(productRepository.findByNameOrderByNumberAsc("펜"));
+        System.out.println(productRepository.findByNameOrderByNumberDesc("펜"));
+
+        System.out.println(productRepository.findByNameOrderByPriceAscStockDesc("펜"));
+
+        // 예제 8.16
+        System.out.println(productRepository.findByName("펜", Sort.by(Order.asc("price"))));
+        System.out.println(productRepository.findByName("펜", Sort.by(Order.asc("price"), Order.desc("stock"))));
+        // 예제 8.17
+        System.out.println(productRepository.findByName("펜", getSort()));
+
+        System.out.println(productRepository.findByName("펜", PageRequest.of(0, 2)));
+        // 예제 8.19
+        Page<Product> productPage = productRepository.findByName("펜", PageRequest.of(0, 2));
+        // 예제 8.20
+        System.out.println(productPage.getContent());
+
+        System.out.println(productRepository.findByName("펜", PageRequest.of(0, 2, Sort.by(Order.asc("price")))));
+        System.out.println(productRepository.findByName("펜", PageRequest.of(0, 2, Sort.by(Order.asc("price")))).getContent());
+    }
+
+    // 예제 8.17
+    private Sort getSort() {
+        return Sort.by(
+                Order.asc("price"),
+                Order.desc("stock")
+        );
     }
 
    /*
@@ -74,6 +92,8 @@ public class ProductRepositoryTest {
    * */
     @Test
     void queryDslTest() {
+
+
         //JPAQuery를 활용한 코드
         JPAQuery<Product> query = new JPAQuery(entityManager);
         QProduct qProduct = QProduct.product;
@@ -83,6 +103,10 @@ public class ProductRepositoryTest {
                 .where(qProduct.name.eq("펜"))
                 .orderBy(qProduct.price.asc())
                 .fetch();
+
+        System.out.println("***************************fetch 이후의 실행*********************************");
+
+
         /*
         * List<T> fetch() : 조회 결과를 리스트로 반환합니다.
         * T fetchOne : 단 건의 조회결과를 반환합니다.
@@ -101,6 +125,8 @@ public class ProductRepositoryTest {
             System.out.println();
             System.out.println("---------------------");
         }
+
+        System.out.println("***************************for문 이후의 실행*********************************");
 
     }
     @Test
@@ -159,6 +185,25 @@ public class ProductRepositoryTest {
             System.out.println("---------------------");
         }
     }
+
+    @Test
+    void queryDslTest4() {
+        QProduct qProduct = QProduct.product;
+
+        List<String> productList = jpaQueryFactory
+                .select(qProduct.name)
+                .from(qProduct)
+                .where(qProduct.name.eq("펜"))
+                .orderBy(qProduct.price.asc())
+                .fetch();
+
+        for (String product : productList) {
+            System.out.println("---------------------");
+            System.out.println("Product Name : " + product);
+            System.out.println("---------------------");
+        }
+    }
+
 
 
 }
