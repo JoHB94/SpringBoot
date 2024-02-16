@@ -1,11 +1,13 @@
 package com.springboot.advanced_jpa.data.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.springboot.advanced_jpa.data.entity.Product;
 import com.springboot.advanced_jpa.data.entity.QProduct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -123,7 +125,40 @@ public class ProductRepositoryTest {
         }
     }
 
+    @Test
+    void queryDslTest3() {
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+        QProduct qProduct = QProduct.product;
 
+        List<String> productList = jpaQueryFactory
+                .select(qProduct.name)
+                .from(qProduct)
+                .where(qProduct.name.eq("펜"))
+                .orderBy(qProduct.price.asc())
+                .fetch();
+
+        for(String product : productList) {
+            System.out.println("---------------------");
+            System.out.println("Product Name : " + product);
+            System.out.println("---------------------");
+        }
+        /*
+        * 조회 대상이 여러 개 일 경우 List<String>이 아닌 List<Tuple>타입을 사용합니다.
+        * */
+        List<Tuple> tupleList = jpaQueryFactory
+                .select(qProduct.name, qProduct.price)
+                .from(qProduct)
+                .where(qProduct.name.eq("펜"))
+                .orderBy(qProduct.price.asc())
+                .fetch();
+
+        for (Tuple product : tupleList) {
+            System.out.println("---------------------");
+            System.out.println("Product Name : " + product.get(qProduct.name));
+            System.out.println("Product Price : " + product.get(qProduct.price));
+            System.out.println("---------------------");
+        }
+    }
 
 
 }
